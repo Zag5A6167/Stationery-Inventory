@@ -10,12 +10,47 @@ public static class ProductEndpoints
 app.MapGet("/products", async (AppDbContext db) =>
     await db.Products.ToListAsync());
 
-app.MapPost("/products", async (AppDbContext db, Product product) =>
+
+
+app.MapPost("/products", async (AppDbContext db, HttpRequest request) =>
 {
+    var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+Console.WriteLine(">>> โฟลเดอร์ที่บันทึกคือ: " + folderPath);
+    var form = await request.ReadFormAsync();
+    var file = form.Files.GetFile("image"); 
+    
+    var product = new Product
+    {
+        Name = form["name"].ToString(),
+        Stock = int.Parse(form["stock"]!),
+        Price = decimal.Parse(form["price"]!)
+    };
+
+    if (file != null)
+    {
+       
+        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+        
+        using (var stream = new FileStream(path, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+        product.ImageUrl = fileName; 
+    }
+
     db.Products.Add(product);
     await db.SaveChangesAsync();
     return Results.Created($"/products/{product.Id}", product);
-});
+})
+.DisableAntiforgery();
+
+// app.MapPost("/products", async (AppDbContext db, Product product) =>
+// {
+//     db.Products.Add(product);
+//     await db.SaveChangesAsync();
+//     return Results.Created($"/products/{product.Id}", product);
+// });
 
 
 app.MapPut("/products/{id}", async (int id, Product inputProduct, AppDbContext db) =>
