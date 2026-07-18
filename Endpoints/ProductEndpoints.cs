@@ -72,6 +72,17 @@ app.MapDelete("/products/{id}", async (int id, AppDbContext db) =>
     var product = await db.Products.FindAsync(id);
     if (product is null) return Results.NotFound();
 
+    if (!string.IsNullOrEmpty(product.ImageUrl))
+    {
+        var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", product.ImageUrl);
+        Console.WriteLine(">>> เข้ามาที่ฟังก์ชัน Delete แล้ว! id คือ: " + id); // เพิ่มบรรทัดนี้เพื่อ Test
+        if (File.Exists(imagePath))
+        {
+            File.Delete(imagePath);
+            Console.WriteLine(">>> deleted file !");
+        }
+    }
+
     db.Products.Remove(product);
     await db.SaveChangesAsync();
     return Results.NoContent();
