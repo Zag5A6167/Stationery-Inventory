@@ -65,6 +65,21 @@
 
         </div>
 
+        <!-- Modal Background -->
+<div id="editModal" class="modal" >
+    <div class="modal-content">
+        <h3>Edit Product</h3>
+        <input type="hidden" id="editId">
+        <input type="text" id="editName" placeholder="Product Name">
+        <input type="number" id="editPrice" placeholder="Price">
+        <input type="number" id="editStock" placeholder="Stock">
+        <input type="file" id="editImage">
+        
+        <button onclick="updateProduct()">Save Changes</button>
+        <button onclick="closeModal()">Cancel</button>
+    </div>
+</div>
+
         <script>
             const API_URL = 'http://localhost:5015/products';
 
@@ -140,6 +155,16 @@
                     fetch(`${API_URL}/${id}`, { method: 'DELETE' })
                         .then(() => loadProducts());
                 }
+            }
+
+
+            function openEditForm(id){
+                document.getElementById('editModal').style.display = 'flex';
+                alert("Hellio");
+            }
+            
+            function closeModal(){
+                document.getElementById('editModal').style.display = 'none';
             }
 
 
