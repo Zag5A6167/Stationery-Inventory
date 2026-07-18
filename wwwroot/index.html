@@ -103,6 +103,7 @@
             <td>${p.stock}</td>
             <td>$${p.price}</td>
             <td>
+                <button class="btn-edit" onclick="openEditForm(${p.id})"></button>
                 <button class="btn-delete" onclick="deleteProduct(${p.id})">Delete</button>
             </td>
         </tr>`
