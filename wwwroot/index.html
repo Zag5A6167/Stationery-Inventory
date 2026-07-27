@@ -66,19 +66,19 @@
         </div>
 
         <!-- Modal Background -->
-<div id="editModal" class="modal" >
-    <div class="modal-content">
-        <h3>Edit Product</h3>
-        <input type="hidden" id="editId">
-        <input type="text" id="editName" placeholder="Product Name">
-        <input type="number" id="editPrice" placeholder="Price">
-        <input type="number" id="editStock" placeholder="Stock">
-        <input type="file" id="editImage">
-        
-        <button onclick="updateProduct()">Save Changes</button>
-        <button onclick="closeModal()">Cancel</button>
-    </div>
-</div>
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <h3>Edit Product</h3>
+                <input type="hidden" id="editId">
+                <input type="text" id="editName" placeholder="Product Name">
+                <input type="number" id="editPrice" placeholder="Price">
+                <input type="number" id="editStock" placeholder="Stock">
+                <input type="file" id="editImage">
+
+                <button onclick="updateProduct()">Save Changes</button>
+                <button onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
 
         <script>
             const API_URL = 'http://localhost:5015/products';
@@ -118,7 +118,7 @@
             <td>${p.stock}</td>
             <td>$${p.price}</td>
             <td>
-                <button class="btn-edit" onclick="openEditForm(${p.id})"></button>
+                <button class="btn-edit" onclick="openEditForm(${p.id})">Edit</button>
                 <button class="btn-delete" onclick="deleteProduct(${p.id})">Delete</button>
             </td>
         </tr>`
@@ -133,13 +133,13 @@
                 formData.append("stock", document.getElementById('stock').value);
                 formData.append("price", document.getElementById('price').value);
 
-         
+
                 const imageInput = document.getElementById('imageInput');
                 if (imageInput.files.length > 0) {
                     formData.append("image", imageInput.files[0]);
                 }
 
-             
+
                 await fetch(API_URL, {
                     method: 'POST',
                     body: formData
@@ -157,13 +157,61 @@
                 }
             }
 
+            async function updateProduct() {
+                const id = document.getElementById('editId').value;
 
-            function openEditForm(id){
-                document.getElementById('editModal').style.display = 'flex';
-                alert("Hellio");
+           
+                const updateData = {
+                    id: parseInt(id),
+                    name: document.getElementById('editName').value,
+                    stock: parseInt(document.getElementById('editStock').value),
+                    price: parseFloat(document.getElementById('editPrice').value)
+                };
+
+                try {
+                    const response = await fetch(`${API_URL}/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json' 
+                        },
+                        body: JSON.stringify(updateData) 
+                    });
+
+                    if (response.ok) {
+                        closeModal();
+                        loadProducts();
+                    } else {
+                        alert('Failed to update product');
+                    }
+                } catch (error) {
+                    console.error('Error updating product:', error);
+                }
             }
-            
-            function closeModal(){
+
+
+            function openEditForm(id) {
+                const button = event.target;
+                const row = button.closest('tr');
+
+                const cells = row.querySelectorAll('td');
+
+                const name = cells[1].innerText;
+                const stock = cells[2].innerText;
+                const price = cells[3].innerText.replace('$', '');
+
+
+                document.getElementById('editId').value = id;
+                document.getElementById('editName').value = name;
+                document.getElementById('editStock').value = stock;
+                document.getElementById('editPrice').value = price;
+                document.getElementById('editImage').value = '';
+
+                document.getElementById('editModal').style.display = 'flex';
+
+
+            }
+
+            function closeModal() {
                 document.getElementById('editModal').style.display = 'none';
             }
 
