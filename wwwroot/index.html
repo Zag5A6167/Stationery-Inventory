@@ -49,21 +49,20 @@
         <div id="page-dashboard" class="page">
             <div class="container">
                 <h1>Dashboard</h1>
+                <p>Dashboard</p>
                 <br>
-
+       
             </div>
-
-            <div id="page-settings" class="page">
-                <div class="container">
-                    <h1>Settings</h1>
-                    wdwddw
-
-                    <br>
-
-                </div>
-            </div>
-
         </div>
+
+        <div id="page-settings" class="page">
+            <div class="container">
+                <h1>Settings</h1>
+                <p>System settings.</p>
+                <br>
+            </div>
+        </div>
+
 
         <!-- Modal Background -->
         <div id="editModal" class="modal" style="display: none;">
@@ -160,7 +159,7 @@
             async function updateProduct() {
                 const id = document.getElementById('editId').value;
 
-           
+
                 const updateData = {
                     id: parseInt(id),
                     name: document.getElementById('editName').value,
@@ -172,9 +171,9 @@
                     const response = await fetch(`${API_URL}/${id}`, {
                         method: 'PUT',
                         headers: {
-                            'Content-Type': 'application/json' 
+                            'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(updateData) 
+                        body: JSON.stringify(updateData)
                     });
 
                     if (response.ok) {
