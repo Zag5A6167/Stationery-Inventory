@@ -22,18 +22,28 @@
         }
 
         dialog.image-zoom-modal {
-            padding: 0;
+           padding: 0;
             border: none;
-            background: rgba(0, 0, 0, 0.9);
+       
             max-width: 80vw;
-            max-height: 90vh;
+            max-height: 80vh;
             border-radius: 8px;
             cursor: pointer;
-            overflow: hidden;
             box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            
+         
+            margin: auto;
+        }
+
+        dialog.image-zoom-modal[open] {
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+      
+        dialog.image-zoom-modal:not([open]) {
+            display: none;
         }
 
         dialog.image-zoom-modal::backdrop {

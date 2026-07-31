@@ -215,19 +215,34 @@
 
 
 
+        
             function openZoomModal(imageUrl) {
                 const modal = document.getElementById('imageZoomModal');
                 const zoomedImg = document.getElementById('zoomedImg');
                 
-                zoomedImg.src = imageUrl; 
-                modal.showModal();
+           
+                if (modal.open && zoomedImg.src === window.location.origin + imageUrl) {
+                    modal.close();
+                } else {
+                
+                    zoomedImg.src = imageUrl; 
+                    modal.showModal();
+                }
             }
 
-        
+
             function closeZoomModal() {
                 const modal = document.getElementById('imageZoomModal');
                 modal.close(); 
             }
+
+
+            document.getElementById('zoomedImg').addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                const modal = document.getElementById('imageZoomModal');
+                modal.close();
+            });
+
 
 
             loadProducts();
