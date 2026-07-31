@@ -35,6 +35,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th>Img</th>
                             <th>Name</th>
                             <th>Stock</th>
                             <th>Price</th>
@@ -77,7 +78,13 @@
                 <button onclick="updateProduct()">Save Changes</button>
                 <button onclick="closeModal()">Cancel</button>
             </div>
+
+            
         </div>
+        
+        <dialog id="imageZoomModal" class="image-zoom-modal" onclick="closeZoomModal()">
+            <img id="zoomedImg" src="" alt="Zoomed Product Image">
+        </dialog>
 
         <script>
             const API_URL = 'http://localhost:5015/products';
@@ -106,23 +113,27 @@
 
 
             async function loadProducts() {
-                const response = await fetch(API_URL);
-                const data = await response.json();
-                const tbody = document.getElementById('product-table-body');
+    const response = await fetch(API_URL);
+    const data = await response.json();
+    const tbody = document.getElementById('product-table-body');
 
-                tbody.innerHTML = data.map(p =>
-                    `<tr>
-            <td><img src="/images/${p.imageUrl || 'default.png'}" width="50"></td>
-            <td>${p.name} </td>
+    tbody.innerHTML = data.map(p => {
+        
+        const imageUrl = `/images/${p.imageUrl || 'default.png'}`;
+
+        return `<tr>
+   
+            <td><img class="product-thumb" src="${imageUrl}" width="50" onclick="openZoomModal('${imageUrl}')"></td>
+            <td>${p.name}</td>
             <td>${p.stock}</td>
             <td>${p.price} baht</td>
             <td>
                 <button class="btn-edit" onclick='openEditForm(${p.id}, ${JSON.stringify(p)})'>Edit</button>
                 <button class="btn-delete" onclick="deleteProduct(${p.id})">Delete</button>
             </td>
-        </tr>`
-                ).join('');
-            }
+        </tr>`;
+    }).join('');
+}
 
 
             document.getElementById('add-product-form').addEventListener('submit', async (e) => {
@@ -200,6 +211,22 @@
 
             function closeModal() {
                 document.getElementById('editModal').style.display = 'none';
+            }
+
+
+
+            function openZoomModal(imageUrl) {
+                const modal = document.getElementById('imageZoomModal');
+                const zoomedImg = document.getElementById('zoomedImg');
+                
+                zoomedImg.src = imageUrl; 
+                modal.showModal();
+            }
+
+        
+            function closeZoomModal() {
+                const modal = document.getElementById('imageZoomModal');
+                modal.close(); 
             }
 
 

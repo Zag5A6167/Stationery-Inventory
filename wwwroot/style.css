@@ -10,6 +10,48 @@
             display: flex;
             min-height: 100vh;
         }
+
+        .product-thumb {
+            cursor: zoom-in;
+            object-fit: cover;
+            border-radius: 4px;
+            transition: opacity 0.2s;
+        }
+        .product-thumb:hover {
+            opacity: 0.8;
+        }
+
+        dialog.image-zoom-modal {
+            padding: 0;
+            border: none;
+            background: rgba(0, 0, 0, 0.9);
+            max-width: 80vw;
+            max-height: 90vh;
+            border-radius: 8px;
+            cursor: pointer;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        dialog.image-zoom-modal::backdrop {
+            background: rgba(0, 0, 0, 0.85);
+        }
+
+        dialog.image-zoom-modal img {
+            display: block;
+            max-width: 85vw;
+            max-height: 85vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            margin: auto;
+            align-items: center;
+        }
+
+
         
      
 
